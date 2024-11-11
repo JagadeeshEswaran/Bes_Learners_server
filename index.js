@@ -1,17 +1,18 @@
 const express = require("express");
 const { status: httpStatus } = require("http-status");
 const userData = require("./data");
+const apiKeyMiddleware = require("./middlewares/apiKeyAuth");
 const app = express();
 
-app.get("/api/v1/test", (req, res) => {
+app.get("/api/v1/test", apiKeyMiddleware, (req, res) => {
 	res.status(httpStatus.OK).json({ success: true, message: "Hello World" });
 });
 
-app.get("/api/v1/users", (req, res) => {
+app.get("/api/v1/users", apiKeyMiddleware, (req, res) => {
 	res.status(httpStatus.OK).json({ success: true, data: userData });
 });
 
-app.get("/api/v1/user/:id", (req, res) => {
+app.get("/api/v1/user/:id", apiKeyMiddleware, (req, res) => {
 	const userId = req.params.id;
 
 	if (!userId) {
@@ -31,7 +32,7 @@ app.get("/api/v1/user/:id", (req, res) => {
 	res.status(httpStatus.OK).json({ success: true, data: user });
 });
 
-app.get("/api/v1/user/", (req, res) => {
+app.get("/api/v1/user/", apiKeyMiddleware, (req, res) => {
 	const username = req.query.username;
 
 	if (!username) {
